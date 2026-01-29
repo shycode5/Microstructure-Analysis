@@ -23,8 +23,44 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    # Serve the generated dashboard
-    return send_from_directory(OUTPUT_FOLDER, 'index.html')
+    # Check if report exists
+    report_path = os.path.join(OUTPUT_FOLDER, 'index.html')
+    if os.path.exists(report_path):
+        return send_from_directory(OUTPUT_FOLDER, 'index.html')
+    
+    # Fallback Landing Page
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Microstructure Analysis</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+        <style>
+            body { font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f1f5f9; margin: 0; }
+            .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; }
+            h1 { margin-bottom: 10px; color: #0f172a; font-size: 1.5rem; }
+            p { color: #64748b; margin-bottom: 30px; }
+            .upload-box { border: 2px dashed #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+            button { background: #0ea5e9; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; transition: background 0.2s; }
+            button:hover { background: #0284c7; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>Microstructure Analyzer</h1>
+            <p>Automated Pearlite/Ferrite Segmentation</p>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="upload-box">
+                    <input type="file" name="file" accept=".png,.jpg,.jpeg,.tif,.tiff" required>
+                </div>
+                <button type="submit">Analyze Image</button>
+            </form>
+        </div>
+    </body>
+    </html>
+    """
 
 @app.route('/<path:filename>')
 def serve_static(filename):
