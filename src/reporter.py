@@ -339,6 +339,29 @@ See `grains.csv` for detailed per-grain data.
         .badge-pearlite {{ background: #fecaca; color: #b91c1c; }}
         .badge-ferrite {{ background: #fef08a; color: #854d0e; }}
         
+        .header-upload-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .analyze-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {{
             .stats-grid {{
@@ -391,10 +414,26 @@ See `grains.csv` for detailed per-grain data.
             </div>
             
             <!-- Upload Form -->
-            <form action="/upload" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; background: #fff; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border);">
-                <input type="file" name="file" accept=".png,.jpg,.jpeg,.tif,.tiff" required style="font-size: 0.8rem;">
-                <button type="submit" style="background: var(--accent-primary); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">Analyze New Image</button>
+            <form action="/upload" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center;">
+                <input type="file" id="headerFile" name="file" accept="image/*,.tif,.tiff" required style="display: none;">
+                <label for="headerFile" class="header-upload-btn">Choose File</label>
+                <div id="headerFileName" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none;"></div>
+                <button type="submit" class="analyze-btn">Analyze</button>
             </form>
+
+            <script>
+                document.getElementById('headerFile').addEventListener('change', function(e) {
+                    if (e.target.files[0]) {
+                        var name = e.target.files[0].name;
+                        var label = document.getElementById('headerFileName');
+                        label.textContent = name;
+                        label.style.display = 'block';
+                        document.querySelector('.header-upload-btn').style.background = '#e2e8f0';
+                        document.querySelector('.header-upload-btn').style.color = '#0f172a';
+                    }
+                });
+            </script>
+
 
 
         </header>
