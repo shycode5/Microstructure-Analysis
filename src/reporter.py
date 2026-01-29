@@ -422,16 +422,16 @@ See `grains.csv` for detailed per-grain data.
             </form>
 
             <script>
-                document.getElementById('headerFile').addEventListener('change', function(e) {
-                    if (e.target.files[0]) {
+                document.getElementById('headerFile').addEventListener('change', function(e) {{
+                    if (e.target.files[0]) {{
                         var name = e.target.files[0].name;
                         var label = document.getElementById('headerFileName');
                         label.textContent = name;
                         label.style.display = 'block';
                         document.querySelector('.header-upload-btn').style.background = '#e2e8f0';
                         document.querySelector('.header-upload-btn').style.color = '#0f172a';
-                    }
-                });
+                    }}
+                }});
             </script>
 
 
