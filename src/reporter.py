@@ -339,6 +339,47 @@ See `grains.csv` for detailed per-grain data.
         .badge-pearlite {{ background: #fecaca; color: #b91c1c; }}
         .badge-ferrite {{ background: #fef08a; color: #854d0e; }}
         
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {{
+            .stats-grid {{
+                grid-template-columns: 1fr 1fr;
+            }}
+            
+            .quality-grid {{
+                grid-template-columns: 1fr;
+            }}
+            
+            .images-section {{
+                grid-template-columns: 1fr;
+            }}
+            
+            header {{
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }}
+            
+            header form {{
+                width: 100%;
+                box-sizing: border-box;
+            }}
+            
+            .details-section {{
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px;
+            }}
+            
+            .section-header {{
+                justify-content: space-between;
+                margin-bottom: 15px;
+            }}
+            
+            .container {{
+                padding: 10px 15px;
+            }}
+        }}
+        
     </style>
 </head>
 <body>

@@ -45,6 +45,11 @@ def index():
             .upload-box { border: 2px dashed #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
             button { background: #0ea5e9; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; transition: background 0.2s; }
             button:hover { background: #0284c7; }
+            
+            @media (max-width: 480px) {
+                .card { padding: 25px; margin: 15px; }
+                h1 { font-size: 1.25rem; }
+            }
         </style>
     </head>
     <body>
