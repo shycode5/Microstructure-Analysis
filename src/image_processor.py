@@ -287,10 +287,28 @@ class MetallographicAnalyzer:
         # If this is high, we have many tiny grains (cobweb effect).
         over_segmentation_index = (small_grains_count / kept_grains) if kept_grains > 0 else 0
         
+        # ASTM E112 Planimetric (Jeffries) Method
+        # G = (3.321928 * log10(NA)) - 2.954
+        # NA = Number of grains per mm^2
+        
+        h, w = self.processed_image.shape[:2]
+        # Scale is um/pixel. 
+        # width_mm = w * scale * 1e-3
+        area_mm2 = (h * self.scale * 1e-3) * (w * self.scale * 1e-3)
+        
+        astm_g = 0
+        if area_mm2 > 0 and kept_grains > 0:
+            na = kept_grains / area_mm2
+            # Handle potential math domain error if na <= 0 (unlikely here)
+            if na > 0:
+                astm_g = (3.321928 * np.log10(na)) - 2.954
+        
         metrics = {
             'otsu_confidence': getattr(self, 'otsu_separability', 0),
             'noise_rejection_percent': noise_rejection_pct,
-            'over_segmentation_index': over_segmentation_index
+            'over_segmentation_index': over_segmentation_index,
+            'astm_grain_size': astm_g,
+            'calibration_um_px': self.scale
         }
             
         return results, metrics

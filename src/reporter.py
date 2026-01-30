@@ -70,12 +70,15 @@ class Reporter:
         
         otsu_conf = metrics.get('otsu_confidence', 0)
         noise_pct = metrics.get('noise_rejection_percent', 0)
-        over_seg = metrics.get('over_segmentation_index', 0)
+        astm_g = metrics.get('astm_grain_size', 0)
+        cal_scale = metrics.get('calibration_um_px', self.analyzer.scale)
 
         # Markdown Report
         report_text = f"""# Metallographic Analysis Report
 
 ## Summary
+- **ASTM Grain Size**: G {astm_g:.2f} (Planimetric Method)
+- **Calibration**: {cal_scale} um/pixel
 - **Total Area Analyzed**: {total_area:.2f} um^2
 - **Pearlite Area Fraction**: {p_frac:.2f}%
 - **Ferrite Area Fraction**: {f_frac:.2f}%
@@ -162,7 +165,7 @@ See `grains.csv` for detailed per-grain data.
         /* Compact Stats Grid */
         .stats-grid {{
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 15px;
         }}
@@ -417,6 +420,9 @@ See `grains.csv` for detailed per-grain data.
             <form action="/upload" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center;">
                 <input type="file" id="headerFile" name="file" accept="image/*,.tif,.tiff" required style="display: none;">
                 <label for="headerFile" class="header-upload-btn">Choose File</label>
+                
+                <input type="number" step="0.001" name="scale" placeholder="µm/px" value="{cal_scale}" required style="width: 70px; padding: 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem;" title="Calibration: microns per pixel">
+                
                 <div id="headerFileName" style="font-size: 0.75rem; color: var(--text-secondary); max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none;"></div>
                 <button type="submit" class="analyze-btn">Analyze</button>
             </form>
@@ -439,6 +445,11 @@ See `grains.csv` for detailed per-grain data.
         </header>
 
         <div class="stats-grid">
+            <div class="stat-card" style="border-left: 4px solid var(--accent-secondary);">
+                <div class="stat-label">ASTM Grain Size</div>
+                <div class="stat-value" style="color: var(--accent-secondary)">G {astm_g:.1f}</div>
+                <div class="stat-unit">Planimetric (E112)</div>
+            </div>
             <div class="stat-card">
                 <div class="stat-label">Pearlite Fraction</div>
                 <div class="stat-value" style="color: var(--danger)">{p_frac:.1f}<span class="stat-unit">%</span></div>

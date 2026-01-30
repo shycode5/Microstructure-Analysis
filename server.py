@@ -77,6 +77,12 @@ def index():
                     <span class="icon">📷</span>
                     <span id="fileName" style="color: #64748b; font-weight: 500; display: block;">Tap to Select Image</span>
                 </label>
+                
+                <div style="margin-bottom: 20px; text-align: left;">
+                    <label style="display: block; color: #64748b; font-size: 0.9rem; margin-bottom: 5px; font-weight: 600;">Calibration (µm/pixel)</label>
+                    <input type="number" step="0.001" name="scale" placeholder="e.g. 0.5" value="0.5" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                </div>
+
                 <button type="submit">Analyze Image</button>
             </form>
         </div>
@@ -112,11 +118,17 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         
+        # Get Scale from form
+        try:
+            scale_input = float(request.form.get('scale', 0.5))
+        except ValueError:
+            scale_input = 0.5
+
         # Run Analysis
         try:
-            print(f"Analyzing {filename}...")
+            print(f"Analyzing {filename} with scale {scale_input} um/px...")
             analyzer = MetallographicAnalyzer(
-                scale_um_per_pixel=0.5, # Default scale, could be form input
+                scale_um_per_pixel=scale_input, 
                 min_grain_area_px=100,
                 min_distance=20
             )
